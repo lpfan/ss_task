@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"crawler"
+	"flag"
+)
 
 func main() {
-	fmt.Println("Test print")
+	var actionFlag = flag.String("action", "scrape", "Provide action name to execute")
+	flag.Parse()
+
+	switch *actionFlag {
+	case "scrape":
+		crawler.ScrapeNewTopics()
+	}
 }

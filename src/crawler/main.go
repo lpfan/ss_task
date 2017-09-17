@@ -68,7 +68,7 @@ func topicWorker(s *mgo.Session, wg *sync.WaitGroup, topicLink string) {
 	}
 }
 
-func scrapeNewTopics() {
+func ScrapeNewTopics() {
 	var wg sync.WaitGroup
 
 	session, mongoErr := mgo.Dial("localhost")
