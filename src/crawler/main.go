@@ -68,7 +68,7 @@ func topicWorker(s *mgo.Session, wg *sync.WaitGroup, topicLink string) {
 	}
 }
 
-func ScrapeNewTopics() {
+func scrapeNewTopics(pagesNum int) {
 	var wg sync.WaitGroup
 
 	session, mongoErr := mgo.Dial("localhost")
@@ -78,7 +78,7 @@ func ScrapeNewTopics() {
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
 
-	for pageNum := 1; pageNum <= 5; pageNum++ {
+	for pageNum := 1; pageNum <= pagesNum; pageNum++ {
 		targetURL := targetURLTemplate
 
 		if pageNum >= 2 {
@@ -98,13 +98,12 @@ func ScrapeNewTopics() {
 				go topicWorker(session, &wg, topicLink)
 			}
 		})
-		//topicLink, ok := doc.Find("div#threadlist div ol#threads .threadbit div.threadinfo div.inner h3.threadtitle a.title").First().Attr("href")
-		//if ok {
-		//  topicLink = decodeStringToUtf(topicLink)
-		//  wg.Add(1)
-		//  go topicWorker(session, &wg, topicLink)
-		//}
 		log.Printf("Processed %d page", pageNum)
 	}
 	wg.Wait()
+}
+
+// StartScraping starts scraping process from outside
+func StartScraping(pageNum int) {
+	scrapeNewTopics(pageNum)
 }
