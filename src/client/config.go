@@ -7,13 +7,15 @@ import (
 )
 
 const (
-	frontendDirName = "frontend"
-	serverPort      = 8080
+	frontendDirName        = "frontend"
+	serverPort             = "8080"
+	frontendApplicationDir = "dist"
 )
 
 type configuration struct {
-	ServerPort   int
-	FrontendPath string
+	ServerPort                    string
+	FrontendPath                  string
+	FrontendApplicationStaticPath string
 }
 
 // create configuration object
@@ -25,6 +27,7 @@ func GetConfiguration() *configuration {
 
 	config := configuration{}
 	config.ServerPort = serverPort
-	config.FrontendPath = fmt.Sprintf("%s/%s", currentDir, frontendDirName)
+	config.FrontendPath = fmt.Sprintf("%s/%s/%s", currentDir, "src/client", frontendDirName)
+	config.FrontendApplicationStaticPath = fmt.Sprintf("%s/%s", config.FrontendPath, frontendApplicationDir)
 	return &config
 }
