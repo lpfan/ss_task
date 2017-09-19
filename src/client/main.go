@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"log"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func main() {
+func startServer() {
 	config := GetConfiguration()
 	fs := http.FileServer(http.Dir(config.FrontendApplicationStaticPath))
 	http.Handle("/dist/", http.StripPrefix("/dist/", fs))
@@ -18,4 +18,13 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 	log.Fatal(s.ListenAndServe())
+
+}
+
+func main() {
+	startServer()
+}
+
+func RunClient() {
+	startServer()
 }

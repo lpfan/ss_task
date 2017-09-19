@@ -1,17 +1,46 @@
 package main
 
 import (
+	"os"
+
+	"client"
 	"crawler"
-	"flag"
+
+	"github.com/urfave/cli"
 )
 
 func main() {
-	var actionFlag = flag.String("action", "scrape", "Provide action name to execute")
-	var pageNumFlag = flag.Int("pages", 5, "Set number of pages to scrape")
-	flag.Parse()
+	var pageNum int
 
-	switch *actionFlag {
-	case "scrape":
-		crawler.StartScraping(*pageNumFlag)
+	app := cli.NewApp()
+	app.Flags = []cli.Flag{
+		cli.IntFlag{
+			Name:        "pages",
+			Value:       5,
+			Usage:       "Set number of pages to scrape",
+			Destination: &pageNum,
+		},
 	}
+	app.Commands = []cli.Command{
+		{
+			Name:    "scrape",
+			Aliases: []string{"s", "scr"},
+			Usage:   "Start scraping process",
+			Action: func(c *cli.Context) error {
+				crawler.StartScraping(pageNum)
+				return nil
+			},
+		},
+		{
+			Name:    "run_client",
+			Aliases: []string{"rcl", "run_cl"},
+			Usage:   "Start client",
+			Action: func(c *cli.Context) error {
+				client.RunClient()
+				return nil
+			},
+		},
+	}
+
+	app.Run(os.Args)
 }
